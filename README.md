@@ -16,24 +16,24 @@ yarn add @steelbrain/exec
 ### Usage
 
 ```typescript
-import { exec, execFile } from '@steelbrain/exec'
+import { spawn, spawnFile } from '@steelbrain/exec'
 
 // Simple version:
-exec('ls', []).then(function(result) {
+spawn('ls', []).then(function(result) {
   console.log('Exit code:', result.exitCode)
   console.log('STDOUT:', result.stdout)
   console.log('STDERR:', result.stderr)
 })
 
 // Supports childProcess#spawn options in 3rd arg
-exec('ls', [], {
+spawn('ls', [], {
   cwd: __dirname,
   stdio: 'inherit',
   windowsHide: true,
 }).then(...)
 
 // Advanced version
-exec('ls', [__dirname], {
+spawn('ls', [__dirname], {
   handleChildProcess(childProcess) {
     // Do whatever you want to child process instance here
   },
@@ -50,17 +50,17 @@ exec('ls', [__dirname], {
 }).then(...)
 
 // Invoke a JS file
-execFile('./helloworld.js', []).then(...)
+spawnFile('./helloworld.js', []).then(...)
 ```
 
 #### API
 
 ```js
-import { ExecOptions, ChildProcess } from 'child_process'
+import { SpawnOptions, ChildProcess } from 'child_process'
 // ^ This import is just for reference, to tell you where the types originally
 // come from. You don't need to actually import it in your project.
 
-interface ExtendedExecOptions<OutputType> extends ExecOptions {
+interface ExtendedSpawnOptions<OutputType> extends SpawnOptions {
   handleChildProcess?: (childProcess: ChildProcess) => void
   handleStdout?: (chunk: OutputType) => void
   handleStderr?: (chunk: OutputType) => void
@@ -70,76 +70,76 @@ interface ProcessPromise<T = any> extends Promise<T> {
   kill(signal?: NodeJS.Signals | number): boolean
 }
 
-// Different input types to "exec" and their outputs
-export function exec(
+// Different input types to "spawn" and their outputs
+export function spawn(
   command: string,
   args: string[],
-  options: { encoding: 'buffer' | null } & Omit<ExtendedExecOptions<Buffer>, 'stdio'>,
+  options: { encoding: 'buffer' | null } & Omit<ExtendedSpawnOptions<Buffer>, 'stdio'>,
 ): ProcessPromise<{
   stdout: Buffer
   stderr: Buffer
   exitCode: number
 }>
-export function exec(
+export function spawn(
   command: string,
   args: string[],
-  options: { encoding: 'buffer' | null } & ExtendedExecOptions<Buffer>,
+  options: { encoding: 'buffer' | null } & ExtendedSpawnOptions<Buffer>,
 ): ProcessPromise<{
   stdout: Buffer | null
   stderr: Buffer | null
   exitCode: number
 }>
-export function exec(
+export function spawn(
   command: string,
   args: string[],
-  options?: { encoding?: BufferEncoding } & Omit<ExtendedExecOptions<string>, 'stdio'>,
+  options?: { encoding?: BufferEncoding } & Omit<ExtendedSpawnOptions<string>, 'stdio'>,
 ): ProcessPromise<{
   stdout: string
   stderr: string
   exitCode: number
 }>
-export function exec(
+export function spawn(
   command: string,
   args: string[],
-  options?: { encoding?: BufferEncoding } & ExtendedExecOptions<string>,
+  options?: { encoding?: BufferEncoding } & ExtendedSpawnOptions<string>,
 ): ProcessPromise<{
   stdout: string | null
   stderr: string | null
   exitCode: number
 }>
 
-// Different input types to "execFile" and their outputs
-export function execFile(
+// Different input types to "spawnFile" and their outputs
+export function spawnFile(
   filePath: string,
   args: string[],
-  options: { encoding: 'buffer' | null } & Omit<ExtendedExecOptions<Buffer>, 'stdio'>,
+  options: { encoding: 'buffer' | null } & Omit<ExtendedSpawnOptions<Buffer>, 'stdio'>,
 ): ProcessPromise<{
   stdout: Buffer
   stderr: Buffer
   exitCode: number
 }>
-export function execFile(
+export function spawnFile(
   filePath: string,
   args: string[],
-  options: { encoding: 'buffer' | null } & ExtendedExecOptions<Buffer>,
+  options: { encoding: 'buffer' | null } & ExtendedSpawnOptions<Buffer>,
 ): ProcessPromise<{
   stdout: Buffer | null
   stderr: Buffer | null
   exitCode: number
 }>
-export function execFile(
+export function spawnFile(
   filePath: string,
   args: string[],
-  options?: { encoding?: BufferEncoding } & Omit<ExtendedExecOptions<string>, 'stdio'>,
+  options?: { encoding?: BufferEncoding } & Omit<ExtendedSpawnOptions<string>, 'stdio'>,
 ): ProcessPromise<{
   stdout: string
   stderr: string
   exitCode: number
 }>
-export function execFile(
+export function spawnFile(
   filePath: string,
   args: string[],
-  options?: { encoding?: BufferEncoding } & ExtendedExecOptions<string>,
+  options?: { encoding?: BufferEncoding } & ExtendedSpawnOptions<string>,
 ): ProcessPromise<{
   stdout: string | null
   stderr: string | null

@@ -1,6 +1,6 @@
-import { ExecOptions, ChildProcess, spawn } from 'child_process'
+import { SpawnOptions, ChildProcess, spawn as nativeSpawn } from 'child_process'
 
-interface ExtendedExecOptions<OutputType> extends ExecOptions {
+interface ExtendedSpawnOptions<OutputType> extends SpawnOptions {
   handleChildProcess?: (childProcess: ChildProcess) => void
   handleStdout?: (chunk: OutputType) => void
   handleStderr?: (chunk: OutputType) => void
@@ -10,14 +10,14 @@ interface ProcessPromise<T = any> extends Promise<T> {
   kill(signal?: NodeJS.Signals | number): boolean
 }
 
-async function execInternal(
+async function spawnInternal(
   command: string,
   args: string[],
   options: (
-    | ({ encoding: 'buffer' | null } & Omit<ExtendedExecOptions<Buffer>, 'stdio'>)
-    | ({ encoding: 'buffer' | null } & ExtendedExecOptions<Buffer>)
-    | ({ encoding?: BufferEncoding } & Omit<ExtendedExecOptions<string>, 'stdio'>)
-    | ({ encoding?: BufferEncoding } & ExtendedExecOptions<string>)) &
+    | ({ encoding: 'buffer' | null } & Omit<ExtendedSpawnOptions<Buffer>, 'stdio'>)
+    | ({ encoding: 'buffer' | null } & ExtendedSpawnOptions<Buffer>)
+    | ({ encoding?: BufferEncoding } & Omit<ExtendedSpawnOptions<string>, 'stdio'>)
+    | ({ encoding?: BufferEncoding } & ExtendedSpawnOptions<string>)) &
     ({
       handleChildProcess(childProcess: ChildProcess): void
     }),
@@ -26,7 +26,7 @@ async function execInternal(
   stderr: string | Buffer | null
   exitCode: number
 }> {
-  const spawnedProcess = spawn(command, args, options)
+  const spawnedProcess = nativeSpawn(command, args, options)
   const promise = new Promise<{
     stdout: string | Buffer | null
     stderr: string | Buffer | null
@@ -84,51 +84,51 @@ async function execInternal(
   return promise
 }
 
-export function exec(
+export function spawn(
   command: string,
   args: string[],
-  options: { encoding: 'buffer' | null } & Omit<ExtendedExecOptions<Buffer>, 'stdio'>,
+  options: { encoding: 'buffer' | null } & Omit<ExtendedSpawnOptions<Buffer>, 'stdio'>,
 ): ProcessPromise<{
   stdout: Buffer
   stderr: Buffer
   exitCode: number
 }>
-export function exec(
+export function spawn(
   command: string,
   args: string[],
-  options: { encoding: 'buffer' | null } & ExtendedExecOptions<Buffer>,
+  options: { encoding: 'buffer' | null } & ExtendedSpawnOptions<Buffer>,
 ): ProcessPromise<{
   stdout: Buffer | null
   stderr: Buffer | null
   exitCode: number
 }>
-export function exec(
+export function spawn(
   command: string,
   args: string[],
-  options?: { encoding?: BufferEncoding } & Omit<ExtendedExecOptions<string>, 'stdio'>,
+  options?: { encoding?: BufferEncoding } & Omit<ExtendedSpawnOptions<string>, 'stdio'>,
 ): ProcessPromise<{
   stdout: string
   stderr: string
   exitCode: number
 }>
-export function exec(
+export function spawn(
   command: string,
   args: string[],
-  options?: { encoding?: BufferEncoding } & ExtendedExecOptions<string>,
+  options?: { encoding?: BufferEncoding } & ExtendedSpawnOptions<string>,
 ): ProcessPromise<{
   stdout: string | null
   stderr: string | null
   exitCode: number
 }>
 
-export function exec(
+export function spawn(
   command: string,
   args: string[],
   options?:
-    | ({ encoding: 'buffer' | null } & Omit<ExtendedExecOptions<Buffer>, 'stdio'>)
-    | ({ encoding: 'buffer' | null } & ExtendedExecOptions<Buffer>)
-    | ({ encoding?: BufferEncoding } & Omit<ExtendedExecOptions<string>, 'stdio'>)
-    | ({ encoding?: BufferEncoding } & ExtendedExecOptions<string>),
+    | ({ encoding: 'buffer' | null } & Omit<ExtendedSpawnOptions<Buffer>, 'stdio'>)
+    | ({ encoding: 'buffer' | null } & ExtendedSpawnOptions<Buffer>)
+    | ({ encoding?: BufferEncoding } & Omit<ExtendedSpawnOptions<string>, 'stdio'>)
+    | ({ encoding?: BufferEncoding } & ExtendedSpawnOptions<string>),
 ): ProcessPromise<{
   stdout: string | Buffer | null
   stderr: string | Buffer | null
@@ -136,7 +136,7 @@ export function exec(
 }> {
   let spawnedProcess: ChildProcess
 
-  const promise = execInternal(command, args, {
+  const promise = spawnInternal(command, args, {
     ...options,
     handleChildProcess(_spawnedProcess) {
       spawnedProcess = _spawnedProcess
@@ -155,56 +155,56 @@ export function exec(
   return promise
 }
 
-export function execFile(
+export function spawnFile(
   filePath: string,
   args: string[],
-  options: { encoding: 'buffer' | null } & Omit<ExtendedExecOptions<Buffer>, 'stdio'>,
+  options: { encoding: 'buffer' | null } & Omit<ExtendedSpawnOptions<Buffer>, 'stdio'>,
 ): ProcessPromise<{
   stdout: Buffer
   stderr: Buffer
   exitCode: number
 }>
-export function execFile(
+export function spawnFile(
   filePath: string,
   args: string[],
-  options: { encoding: 'buffer' | null } & ExtendedExecOptions<Buffer>,
+  options: { encoding: 'buffer' | null } & ExtendedSpawnOptions<Buffer>,
 ): ProcessPromise<{
   stdout: Buffer | null
   stderr: Buffer | null
   exitCode: number
 }>
-export function execFile(
+export function spawnFile(
   filePath: string,
   args: string[],
-  options?: { encoding?: BufferEncoding } & Omit<ExtendedExecOptions<string>, 'stdio'>,
+  options?: { encoding?: BufferEncoding } & Omit<ExtendedSpawnOptions<string>, 'stdio'>,
 ): ProcessPromise<{
   stdout: string
   stderr: string
   exitCode: number
 }>
-export function execFile(
+export function spawnFile(
   filePath: string,
   args: string[],
-  options?: { encoding?: BufferEncoding } & ExtendedExecOptions<string>,
+  options?: { encoding?: BufferEncoding } & ExtendedSpawnOptions<string>,
 ): ProcessPromise<{
   stdout: string | null
   stderr: string | null
   exitCode: number
 }>
 
-export function execFile(
+export function spawnFile(
   filePath: string,
   args: string[],
   options?:
-    | ({ encoding: 'buffer' | null } & Omit<ExtendedExecOptions<Buffer>, 'stdio'>)
-    | ({ encoding: 'buffer' | null } & ExtendedExecOptions<Buffer>)
-    | ({ encoding?: BufferEncoding } & Omit<ExtendedExecOptions<string>, 'stdio'>)
-    | ({ encoding?: BufferEncoding } & ExtendedExecOptions<string>),
+    | ({ encoding: 'buffer' | null } & Omit<ExtendedSpawnOptions<Buffer>, 'stdio'>)
+    | ({ encoding: 'buffer' | null } & ExtendedSpawnOptions<Buffer>)
+    | ({ encoding?: BufferEncoding } & Omit<ExtendedSpawnOptions<string>, 'stdio'>)
+    | ({ encoding?: BufferEncoding } & ExtendedSpawnOptions<string>),
 ): ProcessPromise<{
   stdout: string | Buffer | null
   stderr: string | Buffer | null
   exitCode: number
 }> {
-  return exec(process.execPath, [filePath].concat(args), options as any)
+  return spawn(process.execPath, [filePath].concat(args), options as any)
   // ^ TS is drunk, force override the type
 }
