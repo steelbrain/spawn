@@ -3,6 +3,8 @@
 Node's Process spawning APIs beautified, lightweight with no dependencies and Typescript typings.
 Supports NodeJS ESM Loader.
 
+If you came here looking for [`sb-exec`][sb-exec], please head over to the [`sb-exec`][sb-exec] branch.
+
 ## Installation
 
 ```sh
@@ -148,3 +150,5 @@ export function execFile(
 #### License
 
 This project is licensed under the terms of MIT License. See the License file for more info.
+
+[sb-exec]:https://github.com/steelbrain/exec/tree/sb-exec
