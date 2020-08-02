@@ -3,20 +3,18 @@
 Node's Process spawning APIs beautified, lightweight with no dependencies and Typescript typings.
 Supports NodeJS ESM Loader.
 
-If you came here looking for [`sb-exec`][sb-exec], please head over to the [`sb-exec`][sb-exec] branch.
-
 ## Installation
 
 ```sh
-npm install --save @steelbrain/exec
+npm install --save @steelbrain/spawn
 # OR
-yarn add @steelbrain/exec
+yarn add @steelbrain/spawn
 ```
 
 ### Usage
 
 ```typescript
-import { spawn, spawnFile } from '@steelbrain/exec'
+import { spawn, spawnFile } from '@steelbrain/spawn'
 
 // Simple version:
 spawn('ls', []).then(function(result) {
@@ -150,5 +148,3 @@ export function spawnFile(
 #### License
 
 This project is licensed under the terms of MIT License. See the License file for more info.
-
-[sb-exec]:https://github.com/steelbrain/exec/tree/sb-exec

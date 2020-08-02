@@ -1,4 +1,4 @@
-# @steelbrain/exec Changelog:
+# @steelbrain/spawn Changelog:
 
 ### 0.2.0
 

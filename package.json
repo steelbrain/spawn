@@ -1,5 +1,5 @@
 {
-  "name": "@steelbrain/exec",
+  "name": "@steelbrain/spawn",
   "version": "0.2.0",
   "description": "Process spawning APIs beautified",
   "main": "lib/cjs/index.js",
@@ -24,17 +24,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/steelbrain/exec.git"
+    "url": "git+https://github.com/steelbrain/spawn.git"
   },
   "author": "steelbrain",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/steelbrain/exec/issues"
+    "url": "https://github.com/steelbrain/spawn/issues"
   },
   "files": [
     "lib/*"
   ],
-  "homepage": "https://github.com/steelbrain/exec#readme",
+  "homepage": "https://github.com/steelbrain/spawn#readme",
   "devDependencies": {
     "@types/node": "^14.0.27",
     "ava": "^3.7.0",
