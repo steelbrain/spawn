@@ -2,12 +2,12 @@ import fs from 'fs'
 import path from 'path'
 import test from 'ava'
 
-import { exec, execFile } from '..'
+import { spawn, spawnFile } from '..'
 
 const fixtureBasic = path.join(__dirname, 'fixtures', 'basic.js')
 
 test('works with ls', async (t) => {
-  const output = await exec('ls', [], {
+  const output = await spawn('ls', [], {
     cwd: __dirname,
   })
 
@@ -19,7 +19,7 @@ test('works with ls', async (t) => {
 })
 
 test('returns a buffer when appropriate', async (t) => {
-  const output = await exec('ls', [], {
+  const output = await spawn('ls', [], {
     cwd: __dirname,
     encoding: 'buffer',
   })
@@ -32,7 +32,7 @@ test('returns a buffer when appropriate', async (t) => {
 })
 
 test('works with ls and args', async (t) => {
-  const output = await exec('ls', ['-a'], {
+  const output = await spawn('ls', ['-a'], {
     cwd: path.dirname(__dirname),
   })
   const listItems = await new Promise<string[]>((resolve, reject) => {
@@ -58,7 +58,7 @@ test('works with ls and args', async (t) => {
 })
 
 test('has a working stderr', async (t) => {
-  const output = await exec('ls', ['/non-existent-dir'])
+  const output = await spawn('ls', ['/non-existent-dir'])
   t.truthy(output.exitCode === 1 || output.exitCode === 2, 'output.exitCode is non-zero')
   t.truthy(
     output.stderr === 'ls: /non-existent-dir: No such file or directory\n' ||
@@ -68,16 +68,16 @@ test('has a working stderr', async (t) => {
   t.is(output.stdout, '')
 })
 
-test('has a working execFile', async (t) => {
-  const output = await execFile(fixtureBasic, [])
+test('has a working spawnFile', async (t) => {
+  const output = await spawnFile(fixtureBasic, [])
 
   t.is(output.exitCode, 0)
   t.is(output.stderr, 'STDERR-9\n')
   t.is(output.stdout, `STDOUT-6\n${path.dirname(__dirname)}\n`)
 })
 
-test('has a working execFile with cwd', async (t) => {
-  const output = await execFile(fixtureBasic, [], {
+test('has a working spawnFile with cwd', async (t) => {
+  const output = await spawnFile(fixtureBasic, [], {
     cwd: path.join(__dirname, 'fixtures'),
   })
 
