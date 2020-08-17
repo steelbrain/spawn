@@ -1,4 +1,4 @@
-# Exec
+# Spawn
 
 Node's Process spawning APIs beautified, lightweight with no dependencies and Typescript typings.
 Supports NodeJS ESM Loader.
