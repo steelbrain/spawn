@@ -6,7 +6,7 @@ import { exec, execFile } from '..'
 
 const fixtureBasic = path.join(__dirname, 'fixtures', 'basic.js')
 
-test('works with ls', async t => {
+test('works with ls', async (t) => {
   const output = await exec('ls', [], {
     cwd: __dirname,
   })
@@ -18,7 +18,7 @@ test('works with ls', async t => {
   t.snapshot(output)
 })
 
-test('returns a buffer when appropriate', async t => {
+test('returns a buffer when appropriate', async (t) => {
   const output = await exec('ls', [], {
     cwd: __dirname,
     encoding: 'buffer',
@@ -31,12 +31,12 @@ test('returns a buffer when appropriate', async t => {
   t.snapshot(output)
 })
 
-test('works with ls and args', async t => {
+test('works with ls and args', async (t) => {
   const output = await exec('ls', ['-a'], {
     cwd: path.dirname(__dirname),
   })
   const listItems = await new Promise<string[]>((resolve, reject) => {
-    fs.readdir(path.dirname(__dirname), function(err, res) {
+    fs.readdir(path.dirname(__dirname), function (err, res) {
       if (err) {
         reject(err)
       } else {
@@ -57,7 +57,7 @@ test('works with ls and args', async t => {
   t.snapshot(output)
 })
 
-test('has a working stderr', async t => {
+test('has a working stderr', async (t) => {
   const output = await exec('ls', ['/non-existent-dir'])
   t.truthy(output.exitCode === 1 || output.exitCode === 2, 'output.exitCode is non-zero')
   t.truthy(
@@ -68,7 +68,7 @@ test('has a working stderr', async t => {
   t.is(output.stdout, '')
 })
 
-test('has a working execFile', async t => {
+test('has a working execFile', async (t) => {
   const output = await execFile(fixtureBasic, [])
 
   t.is(output.exitCode, 0)
@@ -76,7 +76,7 @@ test('has a working execFile', async t => {
   t.is(output.stdout, `STDOUT-6\n${path.dirname(__dirname)}\n`)
 })
 
-test('has a working execFile with cwd', async t => {
+test('has a working execFile with cwd', async (t) => {
   const output = await execFile(fixtureBasic, [], {
     cwd: path.join(__dirname, 'fixtures'),
   })

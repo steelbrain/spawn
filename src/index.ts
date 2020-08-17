@@ -17,10 +17,10 @@ async function spawnInternal(
     | ({ encoding: 'buffer' | null } & Omit<ExtendedSpawnOptions<Buffer>, 'stdio'>)
     | ({ encoding: 'buffer' | null } & ExtendedSpawnOptions<Buffer>)
     | ({ encoding?: BufferEncoding } & Omit<ExtendedSpawnOptions<string>, 'stdio'>)
-    | ({ encoding?: BufferEncoding } & ExtendedSpawnOptions<string>)) &
-    ({
-      handleChildProcess(childProcess: ChildProcess): void
-    }),
+    | ({ encoding?: BufferEncoding } & ExtendedSpawnOptions<string>)
+  ) & {
+    handleChildProcess(childProcess: ChildProcess): void
+  },
 ): Promise<{
   stdout: string | Buffer | null
   stderr: string | Buffer | null
@@ -39,7 +39,7 @@ async function spawnInternal(
 
     spawnedProcess.on('error', reject)
     if (spawnedProcess.stdout) {
-      spawnedProcess.stdout.on('data', function(chunk) {
+      spawnedProcess.stdout.on('data', function (chunk) {
         output.stdout!.push(chunk)
         if (options.handleStdout) {
           options.handleStdout(chunk)
@@ -47,7 +47,7 @@ async function spawnInternal(
       })
     }
     if (spawnedProcess.stderr) {
-      spawnedProcess.stderr.on('data', function(chunk) {
+      spawnedProcess.stderr.on('data', function (chunk) {
         output.stderr!.push(chunk)
         if (options.handleStderr) {
           options.handleStderr(chunk)
@@ -55,7 +55,7 @@ async function spawnInternal(
       })
     }
 
-    spawnedProcess.on('close', code => {
+    spawnedProcess.on('close', (code) => {
       let outputStdout: string | Buffer | null = null
       if (output.stdout != null) {
         outputStdout =
@@ -147,7 +147,7 @@ export function spawn(
     exitCode: number
   }>
 
-  promise.kill = function(signal?: NodeJS.Signals | number) {
+  promise.kill = function (signal?: NodeJS.Signals | number) {
     // TODO: kill all subprocesses on windows with wmic?
     return spawnedProcess.kill(signal)
   }
