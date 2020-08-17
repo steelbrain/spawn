@@ -25,9 +25,6 @@ jobs:
           paths:
             - node_modules/
       - run:
-          name: Build sources
-          command: yarn prepare
-      - run:
           name: Lint sources
           command: yarn lint
       - run:
