@@ -1,6 +1,6 @@
 # @steelbrain/spawn Changelog:
 
-### Upcoming
+### 0.2.1
 
 - Fix `handleChildProcess` not being invoked
 
