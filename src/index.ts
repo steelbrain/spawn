@@ -140,6 +140,7 @@ export function spawn(
     ...options,
     handleChildProcess(_spawnedProcess) {
       spawnedProcess = _spawnedProcess
+      options?.handleChildProcess?.(_spawnedProcess)
     },
   }) as ProcessPromise<{
     stdout: string | Buffer | null
